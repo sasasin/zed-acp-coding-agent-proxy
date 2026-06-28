@@ -2,7 +2,7 @@
 """stdio proxy for observing Zed ACP traffic to Grok Build.
 
 Usage:
-    uv run /path/to/zed-acp-coding-agent-proxy/zed-acp-coding-agent-proxy.py
+    uv run "C:\\path\\to\\zed-acp-coding-agent-proxy\\zed-acp-coding-agent-proxy.py"
 
 The proxy preserves stdin/stdout as the ACP transport and writes diagnostic
 copies of traffic and process events under ./logs.
