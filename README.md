@@ -4,7 +4,17 @@ Zed editor の External Agent / ACP 接続とコーディングエージェン�
 
 このプロキシは Zed と Grok Build の通信を中継しながら、ACP の送受信ログを `logs/` 配下へ保存します。Grok Build は npm パッケージ `@xai-official/grok` を `npx` 経由で起動します。
 
+このスクリプトは `msvcrt` を使用しているため、Windows 専用です。
+
 * https://www.npmjs.com/package/@xai-official/grok
+
+## アーキテクチャ（データフロー）
+
+```
+Zed (stdin/stdout) ←→ このプロキシ (Python) ←→ Grok Build (npx @xai-official/grok)
+```
+
+起動の流れとしては、Zed が `uv run zed-acp-coding-agent-proxy.py` を custom agent server として起動し、プロキシが内部で `npx -y @xai-official/grok@{version} agent --model {model} stdio` を子プロセスとして立ち上げます。
 
 ## 必要なアプリケーション
 
@@ -29,7 +39,7 @@ Zed の `settings.json` の `agent_servers` に custom agent server を追加し
       "command": "uv",
       "args": [
         "run",
-        "/path/to/zed-acp-coding-agent-proxy/zed-acp-coding-agent-proxy.py"
+        "C:\\path\\to\\zed-acp-coding-agent-proxy\\zed-acp-coding-agent-proxy.py"
       ],
       "env": {
         "GROK_BUILD_VERSION": "0.2.72",
@@ -55,7 +65,7 @@ Zed の `settings.json` の `agent_servers` に custom agent server を追加し
 プロキシを起動すると、以下のようなセッションディレクトリが作成されます。
 
 ```text
-/path/to/zed-acp-coding-agent-proxy/logs/session-YYYYMMDD-HHMMSS-PID/
+C:\path\to\zed-acp-coding-agent-proxy\logs\session-YYYYMMDD-HHMMSS-PID\
 ```
 
 主なログファイル:
@@ -116,7 +126,7 @@ Zed からではなく手元で起動確認する場合は、以下のように�
 ```powershell
 $env:GROK_BUILD_VERSION = "0.2.72"
 $env:GROK_BUILD_MODEL = "grok-build"
-uv run /path/to/zed-acp-coding-agent-proxy/zed-acp-coding-agent-proxy.py
+uv run C:\path\to\zed-acp-coding-agent-proxy\zed-acp-coding-agent-proxy.py
 ```
 
 この場合、ACP の stdin/stdout を待ち受けるため、通常は Zed から custom agent server として起動して使います。
