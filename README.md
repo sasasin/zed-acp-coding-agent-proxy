@@ -1,4 +1,4 @@
-# Zed ACP Grok Build Proxy
+# Zed ACP Coding Agent Proxy
 
 Zed editor の External Agent / ACP 接続とコーディングエージェントの間に置く stdio プロキシです。現在は Grok Build に対応しています。
 
